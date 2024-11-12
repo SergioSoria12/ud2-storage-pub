@@ -18,7 +18,11 @@ class HelloWorldController extends Controller
      */
     public function index()
     {
-        //todo
+        $files = \Storage::files(); 
+        return response()->json([
+            'mensaje' => 'Lista de archivos obtenida correctamente',
+         'archivos' => $files
+        ]);
     }
 
      /**
@@ -34,7 +38,21 @@ class HelloWorldController extends Controller
      */
     public function store(Request $request)
     {
-        //todo
+        $filename = $request->input('filename');
+    $content = $request->input('content');
+
+    if (!$filename || !$content) {
+        return response()->json(['mensaje' => 'Parámetros faltantes'], 422);
+    }
+
+    if (\Storage::exists($filename)) {
+        return response()->json(['mensaje' => 'El archivo ya existe'], 409);
+    }
+
+    \Storage::put($filename, $content);
+
+    return response()->json(['mensaje' => 'Archivo creado exitosamente']);
+
     }
 
      /**
@@ -49,7 +67,18 @@ class HelloWorldController extends Controller
      */
     public function show(string $filename)
     {
-        //todo
+       
+    if (!\Storage::exists($filename)) {
+        return response()->json(['mensaje' => 'Archivo no encontrado'], 404);
+    }
+
+    $content = \Storage::get($filename);
+
+    return response()->json([
+        'mensaje' => 'Archivo leído correctamente',
+        'contenido' => $content
+    ]);
+
     }
 
     /**
@@ -66,7 +95,20 @@ class HelloWorldController extends Controller
      */
     public function update(Request $request, string $filename)
     {
-        //todo
+         $content = $request->input('content');
+
+    if (!$content) {
+        return response()->json(['mensaje' => 'Parámetro de contenido faltante'], 422);
+    }
+
+    if (!\Storage::exists($filename)) {
+        return response()->json(['mensaje' => 'Archivo no encontrado'], 404);
+    }
+
+    \Storage::put($filename, $content);
+
+    return response()->json(['mensaje' => 'Archivo actualizado correctamente']);
+
     }
 
     /**
@@ -81,6 +123,13 @@ class HelloWorldController extends Controller
      */
     public function destroy(string $filename)
     {
-        //todo
+
+    if (!\Storage::exists($filename)) {
+        return response()->json(['mensaje' => 'Archivo no encontrado'], 404);
+    }
+
+    \Storage::delete($filename);
+
+    return response()->json(['mensaje' => 'Archivo eliminado correctamente']);
     }
 }

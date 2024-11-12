@@ -19,8 +19,8 @@ class HelloWorldControllerTest extends TestCase
 
         $response->assertStatus(200)
                  ->assertJson([
-                     'mensaje' => 'Listado de ficheros',
-                     'contenido' => ['file1.txt', 'file2.txt'],
+                     'mensaje' => 'Lista de archivos obtenida correctamente',
+                     'archivos' => ['file1.txt', 'file2.txt'],
                  ]);
     }
 
@@ -35,7 +35,7 @@ class HelloWorldControllerTest extends TestCase
 
         $response->assertStatus(200)
                  ->assertJson([
-                     'mensaje' => 'Guardado con éxito',
+                     'mensaje' => 'Archivo creado exitosamente',
                  ]);
 
         Storage::disk('local')->assertExists('file1.txt');
@@ -69,7 +69,7 @@ class HelloWorldControllerTest extends TestCase
 
         $response->assertStatus(200)
                  ->assertJson([
-                     'mensaje' => 'Archivo leído con éxito',
+                     'mensaje' => 'Archivo leído correctamente',
                      'contenido' => 'Content 1',
                  ]);
     }
@@ -98,7 +98,7 @@ class HelloWorldControllerTest extends TestCase
 
         $response->assertStatus(200)
                  ->assertJson([
-                     'mensaje' => 'Actualizado con éxito',
+                     'mensaje' => 'Archivo actualizado correctamente',
                  ]);
 
         Storage::disk('local')->assertExists('file1.txt');
@@ -115,7 +115,7 @@ class HelloWorldControllerTest extends TestCase
 
         $response->assertStatus(404)
                  ->assertJson([
-                     'mensaje' => 'El archivo no existe',
+                     'mensaje' => 'Archivo no encontrado',
                  ]);
     }
 
@@ -129,7 +129,7 @@ class HelloWorldControllerTest extends TestCase
 
         $response->assertStatus(200)
                  ->assertJson([
-                     'mensaje' => 'Eliminado con éxito',
+                     'mensaje' => 'Archivo eliminado correctamente',
                  ]);
 
         Storage::disk('local')->assertMissing('file1.txt');
@@ -143,7 +143,7 @@ class HelloWorldControllerTest extends TestCase
 
         $response->assertStatus(404)
                  ->assertJson([
-                     'mensaje' => 'El archivo no existe',
+                     'mensaje' => 'Archivo no encontrado',
                  ]);
     }
 }
